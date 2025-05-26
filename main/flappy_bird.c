@@ -57,11 +57,10 @@ void OLEDI2C_drawCircle(short int x, short int y, short int r)
     u8g2_DrawCircle(&u8g2, x, y, r, U8G2_DRAW_ALL);
 }
 
+void nrgen(int cx, int cy, int br);
 void OLEDI2C_printNumI(int num, short int x, short int y, short int un1, short int un2)
 {
-    char buf[12];
-    sprintf(buf, "%d", num);
-    u8g2_DrawStr(&u8g2, x, y, buf);
+    nrgen(x + 1, y - 2, num);
 }
 
 void OLEDI2C_update()
@@ -169,26 +168,26 @@ void Draw_Pipe(int position, int bottom_height){
       }
       if((pipe_position - 2) >=0){
           OLEDI2C_setPixel(pipe_position-2, SH-bottom_height);
-          OLEDI2C_setPixel(pipe_position-2, SH-bottom_height - GAPH);
-          OLEDI2C_drawLine(pipe_position-2,SH-(bottom_height-3),pipe_position-2,SH);
+          OLEDI2C_setPixel(pipe_position-2, SH-bottom_height - GAPH + 1);
+          OLEDI2C_drawLine(pipe_position-2,SH-(bottom_height-4),pipe_position-2,SH);
           OLEDI2C_drawLine(pipe_position-2,SH-(bottom_height+3)-GAPH,pipe_position-2,0);
       }
       if((pipe_position - 1) >= 0) {
           OLEDI2C_setPixel(pipe_position-1, SH-bottom_height);
-          OLEDI2C_setPixel(pipe_position-1, SH-bottom_height - GAPH);
+          OLEDI2C_setPixel(pipe_position-1, SH-bottom_height - GAPH + 1);
       }
       if(pipe_position >= 0) {
           OLEDI2C_setPixel(pipe_position, SH-bottom_height);
-          OLEDI2C_setPixel(pipe_position, SH-bottom_height - GAPH);
+          OLEDI2C_setPixel(pipe_position, SH-bottom_height - GAPH + 1);
       }
       if((pipe_position - 1) >= 0) {
           OLEDI2C_setPixel(pipe_position+1, SH-bottom_height);
-          OLEDI2C_setPixel(pipe_position+1, SH-bottom_height - GAPH);
+          OLEDI2C_setPixel(pipe_position+1, SH-bottom_height - GAPH + 1);
       }
       if((pipe_position - 2) >=0){
           OLEDI2C_setPixel(pipe_position+2, SH-bottom_height);
-          OLEDI2C_setPixel(pipe_position+2, SH-bottom_height - GAPH);
-          OLEDI2C_drawLine(pipe_position+2,SH-(bottom_height-3),pipe_position+2,SH);
+          OLEDI2C_setPixel(pipe_position+2, SH-bottom_height - GAPH + 1);
+          OLEDI2C_drawLine(pipe_position+2,SH-(bottom_height-4),pipe_position+2,SH);
           OLEDI2C_drawLine(pipe_position+2,SH-(bottom_height+3)-GAPH,pipe_position+2,0);
       }
       if((pipe_position - 3) >= 0){
@@ -596,6 +595,8 @@ void GameOver_Screen(int score){
   nrgen( 99, 34, dcd) ;
   nrgen( 107, 34, tcd) ;
 
+  u8g2_DrawStr(&u8g2, 5, 60, "Play Again");
+  u8g2_DrawStr(&u8g2, 95, 60, "Exit");
 
   // Update the display
   OLEDI2C_update();
@@ -608,7 +609,7 @@ int run_spyrometry_bird(void)
   int score;                    // current score
   float velocity;               // bird velocity
   float height;                 // bird height
-  float deltaT = 0.2;
+  float deltaT = 0.3;
   bool PointScored;
 
 
@@ -694,6 +695,11 @@ int run_spyrometry_bird(void)
 
       //check for any button press to start
       esp_light_sleep_start();
+
+      /*
+      if(!gpio_get_level(LEFT_BUTTON))
+        break; //exit game
+      */
 
       Delay(1000);
   }
