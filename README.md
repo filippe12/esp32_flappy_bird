@@ -22,8 +22,8 @@ How to run it
 
 Grab the code:
 
-    git clone https://github.com/filippe12/esp32_snake.git
-    cd esp32_snake
+    git clone https://github.com/filippe12/esp32_flappy_bird.git
+    cd esp32_flappy_bird
 
 Make sure you have ESP-IDF set up.
 
